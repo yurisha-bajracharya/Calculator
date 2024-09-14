@@ -5,13 +5,13 @@ body {
     align-items: center;
 
     height: 100vh;
-    background-color: #333;
+    background-color: #b0acac;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 h1 {
-    color: white;
+    color: rgb(15, 15, 15);
     font-size: 3rem;
     font-weight: 700;
 }
@@ -22,7 +22,7 @@ h1 {
     gap: 10px;
 
     width: 300px;
-    background-color: black;
+    background-color: rgb(33, 32, 32);
     padding: 30px;
     border-radius: 20px;
 }
@@ -50,5 +50,5 @@ h1 {
 }
 
 .orange {
-    background-color:  #ff5722 !important;
+    background-color:  #c74721 !important;
 }
