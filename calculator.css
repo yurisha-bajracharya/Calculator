@@ -3,7 +3,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     height: 100vh;
     background-color: #b0acac;
     margin: 0;
@@ -18,17 +17,16 @@ h1 {
 
 .calculator {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 10px;
-
-    width: 300px;
+    width: 680px;
     background-color: rgb(33, 32, 32);
     padding: 30px;
     border-radius: 20px;
 }
 
 .calculator .output {
-    grid-column: span 4;
+    grid-column: span 7;
     color: white;
     text-align: right;
     font-size: 3rem;
@@ -50,5 +48,5 @@ h1 {
 }
 
 .orange {
-    background-color:  #c74721 !important;
+    background-color: #c74721 !important;
 }
