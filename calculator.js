@@ -22,6 +22,37 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function handleKeyPress(event) {
+    const key = event.key;
+    if (!isNaN(key)) {
+      handleButtonClick(key);
+    } else if (key === "+") {
+      handleButtonClick("+");
+    } else if (key === "-") {
+      handleButtonClick("-");
+    } else if (key === "*") {
+      handleButtonClick("*");
+    } else if (key === "/") {
+      handleButtonClick("/");
+    } else if (key === "Enter") {
+      calculate();
+      audio.play();
+    } else if (key === "Backspace") {
+      displayExpression = displayExpression.slice(0, -1);
+      evalExpression = evalExpression.slice(0, -1);
+      updateOutput(currentExpression || "0");
+    } else if (key === "Escape") {
+      displayExpression = "";
+      evalExpression = "";
+      updateOutput("0");
+    } else if (key === ".") {
+      if (!displayExpression.includes(".")) {
+        handleButtonClick(".");
+      }
+    } else if (key === "%") {
+      handleButtonClick("%");
+    }
+  }
   document
     .getElementById("btn-0")
     .addEventListener("click", () => handleButtonClick("0"));
@@ -80,8 +111,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("btn-equals").addEventListener("click", function () {
     calculate();
+    audio.play(); //Play click audio when equals button is clicked
   });
+  const audio = new Audio();
+  audio.src = "./click.mp3";
+
   document.getElementById("btn-percent").addEventListener("click", function () {
     handleButtonClick("%");
   });
+
+  document.addEventListener("keydown", handleKeyPress);
 });
