@@ -4,20 +4,30 @@ document.addEventListener("DOMContentLoaded", function () {
   let displayExpression = "";
   let isDegreeMode = false;
   let previousResult = 0;
+  let lastActionWasCalculation = false;
 
   function updateOutput(value) {
     outputElement.textContent = value;
   }
 
   function handleButtonClick(value, evalValue = value) {
-    displayExpression += value;
-    evalExpression += evalValue;
-    updateOutput(displayExpression);
+    if (lastActionWasCalculation && !isNaN(value)) {
+      displayExpression = value;
+      evalExpression = evalValue;
+      console.log("updated evalexpression: ", evalExpression);
+      updateOutput(displayExpression);
+    } else {
+      displayExpression += value;
+      evalExpression += evalValue;
+      updateOutput(displayExpression);
+    }
+    lastActionWasCalculation = false;
   }
 
   function calculate() {
     try {
       let expressionToEvaluate = evalExpression;
+      console.log("initial expression: ", expressionToEvaluate);
       if (isDegreeMode) {
         expressionToEvaluate = expressionToEvaluate.replace(
           /Math\.sin\(([^)]+)\)/g,
@@ -38,15 +48,38 @@ document.addEventListener("DOMContentLoaded", function () {
           previousResult
         );
       }
+      //for evaluating factorial
+      if (expressionToEvaluate.includes("factorial(")) {
+        console.log("And I detected it now factorial");
+        expressionToEvaluate = expressionToEvaluate.replace(
+          /factorial\((\d+)\)/g,
+          function (match, number) {
+            console.log("reached here");
+            console.log("factorial match:", match, "number:", number);
+            return factorial(parseInt(number));
+          }
+        );
+      }
+      console.log("fianl expression: ", expressionToEvaluate);
+      console.log("final expression: ", expressionToEvaluate);
       const result = eval(expressionToEvaluate);
       updateOutput(result);
       displayExpression = result.toString();
-      currentExpression = result.toString();
+      evalExpression = result.toString();
       previousResult = result;
+      lastActionWasCalculation = true;
     } catch (error) {
       updateOutput("Error");
       displayExpression = "";
-      currentExpression = "";
+      evalExpression = "";
+    }
+  }
+
+  function factorial(n) {
+    if (n === 0) {
+      return 1;
+    } else {
+      return n * factorial(n - 1);
     }
   }
 
@@ -135,7 +168,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("btn-!").addEventListener("click", function () {
-    handleButtonClick("!", "factorial(");
+    handleButtonClick("fact(", "factorial(");
+    console.log("hey!! you clicked factorial");
   });
 
   document.getElementById("btn-sqrt").addEventListener("click", function () {
@@ -187,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("btn-ans").addEventListener("click", function () {
-    handleButtonClick("Ans", "ans");
+    handleButtonClick("Ans", "Ans");
   });
 
   document.getElementById("btn-dot").addEventListener("click", function () {
@@ -207,8 +241,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   document.getElementById("btn-del").addEventListener("click", function () {
-    displayExpression = displayExpression.slice(0, -1);
-    evalExpression = evalExpression.slice(0, -1);
+    if (displayExpression.endsWith("Ans")) {
+      displayExpression = displayExpression.slice(0, -3);
+      evalExpression = evalExpression.slice(0, -3);
+    } else {
+      displayExpression = displayExpression.slice(0, -1);
+      evalExpression = evalExpression.slice(0, -1);
+    }
     updateOutput(displayExpression || "0");
   });
 
